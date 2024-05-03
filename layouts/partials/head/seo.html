@@ -74,38 +74,23 @@
             "@type": "WebPage",
             "@id": "{{ .Permalink }}"
         },
-        {{- $images := $params.seo.images | default slice -}}
-        {{- if not $images -}}
-            {{- with .Resources.GetMatch "featured-image-preview" -}}
-                {{- $images = slice "featured-image-preview" -}}
-            {{- end -}}
-            {{- with .Resources.GetMatch "featured-image" -}}
-                {{- $images = slice "featured-image" -}}
-            {{- end -}}
-        {{- end -}}
-        {{- with .Site.Params.seo.image -}}
-            {{- $images = $images | default (slice .) -}}
-        {{- end -}}
-        {{- with $images -}}
-            "image": [
-                {{- range $index, $value := . -}}
-                    {{- if gt $index 0 }},{{ end -}}
-                    {{- with dict "Path" $value "Resources" $.Resources | partial "function/resource.html" -}}
-                        {
-                            "@type": "ImageObject",
-                            "url": "{{ .Permalink }}",
-                            "width": {{ .Width }},
-                            "height": {{ .Height }}
-                        }
-                    {{- else -}}
-                        {{- with $value -}}
-                            "{{ . | absURL }}"
-                        {{- end -}}
+        {{- $image := .Params.featuredImage -}}
+        {{- with $image -}}
+            "image":
+                {{- with dict "Path" $image "Resources" $.Resources | partial "function/resource.html" -}}
+                    {
+                        "@type": "ImageObject",
+                        "url": "{{ .Permalink }}",
+                        "width": {{ .Width }},
+                        "height": {{ .Height }}
+                    }
+                {{- else -}}
+                    {{- with $image -}}
+                        "{{ . | absURL }}"
                     {{- end -}}
-                {{- end -}}
-            ],
+                {{- end -}},
         {{- end -}}
-        "genre": "{{ .Type }}",
+        "genre": "crochet pattern",
         {{- with .Params.tags -}}
             "keywords": "{{ delimit . ", " }}",
         {{- end -}}
@@ -122,25 +107,6 @@
         {{- with .Site.Copyright -}}
             "license": {{ . | safeHTML }},
         {{- end -}}
-        {{- $publisher := .Params.author | default .Site.Author.name | default (T "author") | dict "name" -}}
-        {{- $publisher = $params.seo.publisher | default dict | merge $publisher -}}
-        "publisher": {
-            "@type": "Organization",
-            "name": {{ $publisher.name | safeHTML }}
-            {{- $logo := $publisher.logoUrl -}}
-            {{- with dict "Path" $logo "Resources" .Resources | partial "function/resource.html" -}}
-                ,"logo": {
-                    "@type": "ImageObject",
-                    "url": "{{ .Permalink }}",
-                    "width": {{ .Width }},
-                    "height": {{ .Height }}
-                }
-            {{- else -}}
-                {{- with $logo -}}
-                    ,"logo": "{{ . | absURL }}"
-                {{- end -}}
-            {{- end -}}
-        },
         {{- with .Params.author | default .Site.Author.name | default (T "author") -}}
             "author": {
                 "@type": "Person",

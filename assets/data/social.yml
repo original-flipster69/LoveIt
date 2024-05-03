@@ -62,10 +62,10 @@ gitlab:
   Icon:
     Class: fab fa-gitlab fa-fw
 
-# 009: YouTube Legacy
-youtubelegacy:
+# 009: YouTube
+youtube:
   Weight: 9
-  Prefix: https://www.youtube.com/user/
+  Prefix: https://www.youtube.com/
   Title: YouTube
   Icon:
     Class: fab fa-youtube fa-fw
@@ -568,6 +568,14 @@ rootme:
   Prefix: https://www.root-me.org/
   Icon:
     Src: svg/icons/rootme.svg
+
+# 073: Ravelry
+ravelry:
+  Weight: 73
+  Prefix: https://www.ravelry.com/designers/
+  Title: Ravelry
+  Icon:
+    Class: fab fa-ravelry fa-fw
 
 # Phone
 phone:
